@@ -8,3 +8,5 @@ __pycache__/
 data/prompts.test.json
 build/
 dist/
+
+src/data/

@@ -7,6 +7,7 @@ ui 层可通过 AppContext 获得事件总线并订阅业务事件。
 from __future__ import annotations
 
 from collections import defaultdict
+from types import SimpleNamespace
 from typing import Any, Callable
 
 EventHandler = Callable[..., None]
@@ -27,8 +28,11 @@ class EventHub:
             handlers.remove(handler)
 
     def publish(self, event_type: str, *args: Any, **kwargs: Any) -> None:
+        envelope = SimpleNamespace(
+            payload=args[0] if args else None, **kwargs
+        ) if kwargs or not args else SimpleNamespace(payload=args[0])
         for handler in list(self._subscribers.get(event_type, [])):
-            handler(*args, **kwargs)
+            handler(envelope)
 
 
 # 约定的事件类型名

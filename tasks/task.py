@@ -14,11 +14,11 @@ from typing import Any, Callable, Optional
 
 
 class TaskState(Enum):
-    PENDING = "pending"
-    RUNNING = "running"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    CANCELLED = "cancelled"
+    pending = "pending"
+    running = "running"
+    completed = "completed"
+    failed = "failed"
+    cancelled = "cancelled"
 
 
 class TaskCancelled(Exception):
@@ -32,7 +32,7 @@ class Task:
     func: Callable[..., Any]
     args: tuple = field(default_factory=tuple)
     kwargs: dict = field(default_factory=dict)
-    state: TaskState = TaskState.PENDING
+    state: TaskState = TaskState.pending
     result: Any = None
     error: Optional[BaseException] = None
 
@@ -56,12 +56,12 @@ class TaskManager:
         task.state = TaskState.RUNNING
         try:
             task.result = task.func(*task.args, **task.kwargs)
-            task.state = TaskState.COMPLETED
+            task.state = TaskState.completed
         except TaskCancelled:
-            task.state = TaskState.CANCELLED
+            task.state = TaskState.cancelled
         except BaseException as exc:  # noqa: BLE001
             task.error = exc
-            task.state = TaskState.FAILED
+            task.state = TaskState.failed
 
     def get(self, task_id: str) -> Optional[Task]:
         with self._lock:
@@ -70,13 +70,13 @@ class TaskManager:
     def cancel(self, task_id: str) -> bool:
         task = self.get(task_id)
         if task is None or task.state in (
-            TaskState.COMPLETED,
-            TaskState.FAILED,
-            TaskState.CANCELLED,
+            TaskState.completed,
+            TaskState.failed,
+            TaskState.cancelled,
         ):
             return False
         # 标记取消；func 自身需检查是否应中断
-        task.state = TaskState.CANCELLED
+        task.state = TaskState.cancelled
         return True
 
     def all(self) -> list[Task]:

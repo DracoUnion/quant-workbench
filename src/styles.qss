@@ -1,0 +1,62 @@
+/* QuantWorkbench 基础样式 */
+QMainWindow {
+    background: #1e1e1e;
+}
+QWidget {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-size: 13px;
+}
+QListWidget#nav {
+    background: #252526;
+    border: none;
+    outline: none;
+}
+QListWidget#nav::item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #2d2d2d;
+}
+QListWidget#nav::item:selected {
+    background: #007acc;
+    color: #ffffff;
+}
+QListWidget#nav::item:hover {
+    background: #333333;
+}
+QFrame#navLine {
+    background: #3c3c3c;
+    max-width: 1px;
+}
+QTextEdit {
+    background: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    selection-background-color: #007acc;
+}
+QPushButton {
+    background: #3c3c3c;
+    color: #d4d4d4;
+    border: 1px solid #555555;
+    padding: 4px 12px;
+    min-height: 24px;
+}
+QPushButton:hover {
+    background: #505050;
+}
+QPushButton:pressed {
+    background: #2a2a2a;
+}
+QLineEdit {
+    background: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    padding: 4px;
+    min-height: 24px;
+}
+QSplitter::handle {
+    background: #3c3c3c;
+}
+QStatusBar {
+    background: #252526;
+    color: #888888;
+}
