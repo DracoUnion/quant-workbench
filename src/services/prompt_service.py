@@ -105,7 +105,7 @@ class PromptService:
 
     def _load_from_seed(self) -> None:
         """内置种子兜底：确保无 data 目录时仍可运行演示。"""
-        from .seed.prompts import PROMPTS  # noqa: import-not-found
+        from ..seed.prompts import PROMPTS  # noqa: import-not-found
 
         self._prompts.clear()
         self._order.clear()

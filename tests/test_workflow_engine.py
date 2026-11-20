@@ -5,13 +5,10 @@ from __future__ import annotations
 import sys
 import os
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from services.workflow_service import WorkflowService  # noqa: E402
+from src.services.workflow_service import WorkflowService  # noqa: E402
 
 
 def test_dag_acyclic() -> None:

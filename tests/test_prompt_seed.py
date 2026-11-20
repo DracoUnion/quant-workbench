@@ -5,16 +5,13 @@ from __future__ import annotations
 import os
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest  # noqa: E402
 
-from bootstrap import build_context  # noqa: E402
-from services.prompt_service import PromptService  # noqa: E402
+from src.bootstrap import build_context  # noqa: E402
+from src.services.prompt_service import PromptService  # noqa: E402
 
 
 def test_all_prompts_loaded() -> None:

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..models.workflow import WorkflowDefinition, WorkflowNode, WorkflowEdge
+from src.seed.workflows import WORKFLOWS  # noqa: import-not-found
 
 
 class WorkflowService:
@@ -13,6 +14,37 @@ class WorkflowService:
     def __init__(self) -> None:
         self._definitions: dict[int, WorkflowDefinition] = {}
         self._order: list[int] = []
+        for index, item in enumerate(WORKFLOWS, start=1):
+            nodes = [
+                WorkflowNode(
+                    node_key=n["node_key"],
+                    node_type=n["node_type"],
+                    prompt_code=n.get("prompt_code"),
+                    tool_key=n.get("tool_key"),
+                    config_json=n.get("config_json") or {},
+                    order=n.get("order", 0),
+                )
+                for n in item["nodes"]
+            ]
+            edges = [
+                WorkflowEdge(
+                    from_node=e["from_node"],
+                    to_node=e["to_node"],
+                    condition_json=e.get("condition_json") or {},
+                )
+                for e in item["edges"]
+            ]
+            wf = WorkflowDefinition(
+                code=item["code"],
+                name=item["name"],
+                description=item.get("description", ""),
+                version=item.get("version", 1),
+                status=item.get("status", "published"),
+            )
+            wf.id = index
+            wf.nodes = nodes
+            wf.edges = edges
+            self.add(wf)
 
     # ------------------------------------------------------------------ CRUD
     def all(self) -> list[WorkflowDefinition]:
@@ -37,6 +69,13 @@ class WorkflowService:
         self._definitions.pop(wf_id)
         self._order = [i for i in self._order if i != wf_id]
         return True
+
+    def workflow_topo_order(self, code: str) -> list[WorkflowNode]:
+        """按工作流编号返回拓扑排序后的节点列表。"""
+        wf = self.get_by_code(code)
+        if wf is None:
+            return []
+        return self.topological_order(wf)
 
     # ------------------------------------------------------------------ DAG
     def validate_dag(self, wf: WorkflowDefinition) -> list[str]:

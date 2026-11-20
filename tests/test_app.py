@@ -8,8 +8,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from bootstrap import build_context  # noqa: E402
-from services.prompt_service import PromptService  # noqa: E402
+from src.bootstrap import build_context  # noqa: E402
+from src.services.prompt_service import PromptService  # noqa: E402
 
 
 def main() -> None:
